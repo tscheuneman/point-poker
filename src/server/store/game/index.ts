@@ -1,9 +1,17 @@
+interface UserStatus {
+    name: string,
+    points: number | null,
+}
+
+export interface GameInterface {
+    status: 'busy' | 'complete',
+    state: UserStatus[],
+}
+
 export class Game {
-    private game: any;
-    constructor(creator) {
+    private game: GameInterface;
+    constructor(creator: UserStatus) {
         console.log('item');
-        this.game = [{
-            ...creator
-        }];
+        this.game = { state: [creator], status: 'busy' };
     }
 }
