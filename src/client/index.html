@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+            var socket = io('http://localhost:3000');
+            socket.emit('join', JSON.stringify({ roomId: 'sdfdsf3sdf', name: 'sdfsdfsdf' }));
+</script>
+</body>
+</html>
