@@ -41,5 +41,6 @@ export class Game {
 
     removeUser(userId: string): void {
         this.gameState = this.gameState.filter((val) => val.id !== userId);
+        this.lastUpdate = Date.now();
     }
 }
