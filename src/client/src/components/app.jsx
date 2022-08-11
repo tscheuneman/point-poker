@@ -7,14 +7,38 @@ const socket = io();
 
 const App = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [roomId , setRoomId] = useState(null);
+  const [name , setName] = useState(null);
+  const [game, setGame] = useState(null);
 
 
   useEffect(() => {
+    setName(localStorage.getItem('point-poker.displayName'));
     socket.on('connect', () => {
       setIsConnected(true);
     });
+    socket.on('joinedGame', (game) => {
+      setGame(game);
+    });
+    socket.on('refreshGameState', (game) => {
+      setGame(game);
+    });
   }, []);
+
+  const handleRoomJoinCreate = (roomName) => {
+    socket.emit('join', JSON.stringify({roomId: roomName, name: name}));
+  }
+
+  const selectionScreen = () => {
+    if(name) {
+      if (game) {
+        return 'hasRoom'
+      } else {
+        return <RoomSelector onRoomJoinCreate={handleRoomJoinCreate} />
+      }
+    } else {
+      return 'noName';
+    }
+  }
 
     return (
       <>
@@ -25,7 +49,7 @@ const App = () => {
           position: 'absolute',
         }}>
           {
-            roomId ? 'ROOM' : <RoomSelector />
+            selectionScreen()
           }
         </div>
 

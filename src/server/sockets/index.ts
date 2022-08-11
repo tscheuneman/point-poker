@@ -37,9 +37,9 @@ const handleSockets = (sockets: Server) => {
                 id: socket.id,
                 points: null,
             };
+            const game = store.joinGame(joinJson.roomId, user);
             socket.join(`room:${joinJson.roomId}`);
-            store.joinGame(joinJson.roomId, user);
-            console.log('Joined Room : ' + joinJson.roomId);
+            socket.emit('joinedGame', game);
         });
 
         socket.on(GAME_EVENTS.VOTE, (voteReq: string) => {

@@ -12,17 +12,36 @@ import Box from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
+import Input from '@mui/material/Input';
 
-const RoomSelector = () => {
+const RoomSelector = (props) => {
   const [rooms, setRooms] = useState([]);
   const [showCreateRoom, setShowCreateRoom] = useState(false);
+  const [roomName, setRoomName] = useState('');
 
   useEffect(() => {
-    // Get Rooms
+    fetch('/api/rooms')
+      .then((response) => response.json())
+      .then((data) => setRooms(data));
   }, []);
 
   const toggleModal = () => {
     setShowCreateRoom(!showCreateRoom);
+  }
+
+  const handleCreateRoomInput = (evt) => {
+    setRoomName(evt.target.value);
+  }
+
+  const createRoom = () => {
+    if(roomName) {
+      props.onRoomJoinCreate(roomName);
+      setShowCreateRoom(!showCreateRoom);
+    }
+  }
+
+  const handleJoinRoom = (roomName) => {
+    props.onRoomJoinCreate(roomName);
   }
 
 
@@ -41,17 +60,17 @@ const RoomSelector = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Rooms</TableCell>
+                  <TableCell sx={{fontWeight: 'bold'}}>Rooms</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rooms.map((room) => (
+                {Object.keys(rooms).map((room) => (
                   <TableRow
                     key={room?.roomId}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell component="th" scope="row">
-                      Room
+                    <TableCell onClick={() => handleJoinRoom(room)} component="th" scope="row">
+                      {room}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -74,11 +93,18 @@ const RoomSelector = () => {
             p: '15px'
           }}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
+              Create a room
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            <Box>
+              <Input placeholder={"Room Name"} value={roomName} onChange={handleCreateRoomInput} />
+              <Button sx={{
+                display: 'block',
+                mt: '20px'
+              }} variant="contained"
+                onClick={createRoom}>
+                Create Room
+              </Button>
+            </Box>
           </Card>
         </Modal>
       </>
