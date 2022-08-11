@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
+import RoomSelector from './roomSelector';
+
 const socket = io();
 
 const App = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  
+  const [roomId , setRoomId] = useState(null);
+
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -21,8 +24,9 @@ const App = () => {
           width: '100%',
           position: 'absolute',
         }}>
-          App
-          <p>Connected: { '' + isConnected }</p>
+          {
+            roomId ? 'ROOM' : <RoomSelector />
+          }
         </div>
 
       </>
