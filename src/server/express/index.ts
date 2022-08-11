@@ -9,6 +9,9 @@ const handleExpress = (app: Express) => {
     app.get('/', function (req, res) {
         res.sendFile(path.resolve(__dirname, '../../', 'client/index.html'));
     });
+    app.get('/js/main.js', function (req, res) {
+        res.sendFile(path.resolve(__dirname, '../../../', 'dist/main.js'));
+    });
 
     app.get('/api/rooms', function (req, res) {
         const games = store.getGames();

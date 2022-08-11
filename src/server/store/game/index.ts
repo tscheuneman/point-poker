@@ -31,6 +31,18 @@ export class Game {
         this.lastUpdate = Date.now();
     }
 
+    vote(name: string, points: number, cb: () => void) {
+        const user = this.gameState.find(elm => elm.name === name);
+        if(user) {
+            user.points = points;
+        }
+        this.determineGameState();
+
+        if(this.gameStatus === GAME_STATE.COMPLETE) {
+            cb();
+        }
+    }
+
     getGame(): GameInterface {
         return {
             state: this.gameState,
@@ -42,5 +54,19 @@ export class Game {
     removeUser(userId: string): void {
         this.gameState = this.gameState.filter((val) => val.id !== userId);
         this.lastUpdate = Date.now();
+    }
+
+    private determineGameState() {
+        let gameIsValid = true;
+        this.gameState.forEach(userState => {
+            if(userState.points === null) {
+                gameIsValid = false;
+            }
+        });
+
+        if(gameIsValid) {
+            this.gameStatus = GAME_STATE.COMPLETE;
+        }
+        
     }
 }
