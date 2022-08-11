@@ -46,6 +46,9 @@ export class GameManager {
             const game = this.getGame(gameId);
             game.removeUser(userId);
             delete this.users[userId];
+            if (game.numberParticipents() === 0) {
+                delete this.games[gameId];
+            }
         }
 
     }

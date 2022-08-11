@@ -51,6 +51,10 @@ export class Game {
         }
     }
 
+    numberParticipents(): number {
+        return this.gameState.length;
+    }
+
     removeUser(userId: string): void {
         this.gameState = this.gameState.filter((val) => val.id !== userId);
         this.lastUpdate = Date.now();
