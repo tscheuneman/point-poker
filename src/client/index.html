@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        body {
+            margin:0;
+            padding:0;
+        }
+    </style>
 </head>
 <body>
+    <div id="app">
+
+    </div>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
 <script>
+    /*
             var socket = io('http://localhost:3000');
             socket.emit('join', JSON.stringify({ roomId: 'sdfdsf3sdf', name: 'sdfsdfsdf' }));
+            socket.emit('vote', JSON.stringify({ roomId: 'sdfdsf3sdf', name: 'sdfsdfsdf', points: 1, }));
+            socket.on('flip', () => {
+                console.log('FLIP');
+            });
+            */
 </script>
 </body>
 </html>
