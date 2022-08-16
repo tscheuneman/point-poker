@@ -9,7 +9,13 @@ export enum GAME_STATE {
     COMPLETE = 'complete'
 }
 
+export enum GAME_TYPE {
+    POINTS = 'points',
+    FIBONACCI = 'fibonacci',
+}
+
 export interface GameInterface {
+    type: GAME_TYPE,
     status: GAME_STATE,
     state: UserStatus[],
     lastUpdate: number,
@@ -19,6 +25,7 @@ export class Game {
     private gameStatus = GAME_STATE.BUSY;
     private gameState: UserStatus[] = [];
     private lastUpdate: number;
+    private gameType = GAME_TYPE.POINTS;
 
     constructor(user: UserStatus) {
         this.gameStatus = GAME_STATE.BUSY;
@@ -45,6 +52,7 @@ export class Game {
 
     getGame(): GameInterface {
         return {
+            type: this.gameType,
             state: this.gameState,
             status: this.gameStatus,
             lastUpdate: this.lastUpdate,
