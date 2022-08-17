@@ -10,7 +10,6 @@ const App = () => {
   const [name , setName] = useState(null);
   const [game, setGame] = useState(null);
   const [roomName, setRoomName] = useState(null);
-  const [isFinished, setisFinished] = useState(false);
 
   useEffect(() => {
     setName(localStorage.getItem('point-poker.displayName'));
@@ -18,10 +17,6 @@ const App = () => {
       setIsConnected(true);
     });
     socket.on('joinedGame', (game) => {
-      setGame(game);
-    });
-    socket.on('flip', (game) => {
-      setisFinished(true);
       setGame(game);
     });
     socket.on('refreshGameState', (game) => {
@@ -49,7 +44,7 @@ const App = () => {
   const selectionScreen = () => {
     if(name) {
       if (game) {
-        return <GameRoom gameState={game} name={name} finished={isFinished} onVoteClick={handleVoteClick} resetGame={handleResetGame} />
+        return <GameRoom gameState={game} name={name} onVoteClick={handleVoteClick} resetGame={handleResetGame} />
       } else {
         return <RoomSelector onRoomJoinCreate={handleRoomJoinCreate} />
       }

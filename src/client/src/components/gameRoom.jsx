@@ -15,7 +15,8 @@ const selectedProps = {
 const GameRoom = (props) => {
     const gameState = props?.gameState?.gameState || [];
     const name = props?.name;
-    const gameFinished = props?.finished || false;
+    const gameFinished = props?.gameState?.gameStatus === 'complete' || false;
+
 
     let endGameState = '';
     if(gameFinished) {

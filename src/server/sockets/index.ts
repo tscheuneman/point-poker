@@ -61,7 +61,7 @@ const handleSockets = (sockets: Server) => {
             const resetJson: ResetInterface = JSON.parse(resetReq);
             const game = store.getGame(resetJson.roomId);
             game.reset();
-            sockets.to(`room:${resetJson.roomId}`).emit('resetGame', game);
+            sockets.to(`room:${resetJson.roomId}`).emit('refreshGameState', game);
         });
       });
 }

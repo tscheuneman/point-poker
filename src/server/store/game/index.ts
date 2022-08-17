@@ -42,6 +42,9 @@ export class Game {
     }
 
     join(user: UserStatus) {
+        if(this.gameStatus === GAME_STATE.COMPLETE) {
+            this.gameStatus = GAME_STATE.BUSY;
+        }
         this.gameState.push(user);
         this.lastUpdate = Date.now();
     }
