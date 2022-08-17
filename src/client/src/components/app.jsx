@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 import RoomSelector from './roomSelector';
-
+import GameRoom from './gameRoom';
 const socket = io();
 
 const App = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [name , setName] = useState(null);
   const [game, setGame] = useState(null);
-
+  const [roomName, setRoomName] = useState(null);
+  const [isFinished, setisFinished] = useState(false);
 
   useEffect(() => {
     setName(localStorage.getItem('point-poker.displayName'));
@@ -19,19 +20,27 @@ const App = () => {
     socket.on('joinedGame', (game) => {
       setGame(game);
     });
+    socket.on('flip', (game) => {
+      setisFinished(true);
+      setGame(game);
+    });
     socket.on('refreshGameState', (game) => {
       setGame(game);
     });
   }, []);
 
   const handleRoomJoinCreate = (roomName) => {
+    setRoomName(roomName);
     socket.emit('join', JSON.stringify({roomId: roomName, name: name}));
+  }
+  const handleVoteClick = (points) => {
+    socket.emit('vote', JSON.stringify({roomId: roomName, name: name , points: points}));
   }
 
   const selectionScreen = () => {
     if(name) {
       if (game) {
-        return 'hasRoom'
+        return <GameRoom gameState={game} name={name} finished={isFinished} onVoteClick={handleVoteClick} />
       } else {
         return <RoomSelector onRoomJoinCreate={handleRoomJoinCreate} />
       }
