@@ -33,6 +33,14 @@ export class Game {
         this.lastUpdate = Date.now();
     }
 
+    reset() {
+        this.gameStatus = GAME_STATE.BUSY;
+        this.gameState.forEach(user => {
+            user.points = null;
+        });
+        this.lastUpdate = Date.now();
+    }
+
     join(user: UserStatus) {
         this.gameState.push(user);
         this.lastUpdate = Date.now();

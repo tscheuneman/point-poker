@@ -8,7 +8,8 @@ enum GAME_EVENTS {
     CONNECT = 'connection',
     DISCONNECT = 'disconnect',
     VOTE = 'vote',
-    JOIN = 'join'
+    JOIN = 'join',
+    RESET = 'resetGame',
 } 
 
 interface JoinInterface {
@@ -20,6 +21,10 @@ interface VoteInterface {
     roomId: string;
     name: string;
     points: number;
+}
+
+interface ResetInterface {
+    roomId: string;
 }
 
 const handleSockets = (sockets: Server) => {
@@ -50,6 +55,13 @@ const handleSockets = (sockets: Server) => {
                 sockets.to(`room:${voteJson.roomId}`).emit('flip', game);
             });
             sockets.to(`room:${voteJson.roomId}`).emit('refreshGameState', game);
+        });
+
+        socket.on(GAME_EVENTS.RESET, (resetReq: string) => {
+            const resetJson: ResetInterface = JSON.parse(resetReq);
+            const game = store.getGame(resetJson.roomId);
+            game.reset();
+            sockets.to(`room:${resetJson.roomId}`).emit('resetGame', game);
         });
       });
 }
