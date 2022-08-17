@@ -27,6 +27,11 @@ const App = () => {
     socket.on('refreshGameState', (game) => {
       setGame(game);
     });
+    socket.on('resetGame', (game) => {
+      setisFinished(false);
+      setGame(game);
+    });
+    
   }, []);
 
   const handleRoomJoinCreate = (roomName) => {
@@ -37,10 +42,14 @@ const App = () => {
     socket.emit('vote', JSON.stringify({roomId: roomName, name: name , points: points}));
   }
 
+  const handleResetGame = () => {
+    socket.emit('resetGame', JSON.stringify({roomId: roomName}));
+  }
+
   const selectionScreen = () => {
     if(name) {
       if (game) {
-        return <GameRoom gameState={game} name={name} finished={isFinished} onVoteClick={handleVoteClick} />
+        return <GameRoom gameState={game} name={name} finished={isFinished} onVoteClick={handleVoteClick} resetGame={handleResetGame} />
       } else {
         return <RoomSelector onRoomJoinCreate={handleRoomJoinCreate} />
       }

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 
 const points = ['1', '2', '3', '4', '5', '6'];
 
@@ -18,9 +19,17 @@ const GameRoom = (props) => {
 
     let endGameState = '';
     if(gameFinished) {
-        let val = 0;
-        gameState.forEach(elm => { val += parseInt(elm.points) });
-        endGameState = `Average Points: ${(val / gameState.length)}`;
+        let val = 0, min = Infinity, max = -Infinity;
+        gameState.forEach(elm => { 
+            val += parseInt(elm.points);
+            if(elm.points > max) {
+                max = elm.points;
+            }
+            if(elm.points < min) {
+                min = elm.points;
+            }
+        });
+        endGameState = `Average Points: ${(val / gameState.length)} | Min: ${min} | Max: ${max}`;
     }
 
     const userGameState = gameState.find(elm => elm.name === name);
@@ -31,8 +40,19 @@ const GameRoom = (props) => {
         props.onVoteClick(point);
     }
 
+    const handleResetGame = () => {
+        props.resetGame();
+    }
+
     return (
       <>
+        {
+            gameFinished && <>
+                <Button sx={{ position: 'absolute', top: 20, right: 20 }} onClick={handleResetGame} variant="contained">
+                    Reset Game
+                </Button>
+            </>
+        }
         <Box sx={{
             marginTop: '30px',
             display: 'flex',
