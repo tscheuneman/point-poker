@@ -39,15 +39,17 @@ const handleSockets = (sockets: Server) => {
             };
             const game = store.joinGame(joinJson.roomId, user);
             socket.join(`room:${joinJson.roomId}`);
-            socket.emit('joinedGame', game);
+            sockets.to(`room:${joinJson.roomId}`).emit('joinedGame', game);
+
         });
 
         socket.on(GAME_EVENTS.VOTE, (voteReq: string) => {
             const voteJson: VoteInterface = JSON.parse(voteReq);
             const game = store.getGame(voteJson.roomId);
             game.vote(voteJson.name, voteJson.points, () => {
-                sockets.to(`room:${voteJson.roomId}`).emit('flip');
+                sockets.to(`room:${voteJson.roomId}`).emit('flip', game);
             });
+            sockets.to(`room:${voteJson.roomId}`).emit('refreshGameState', game);
         });
       });
 }
