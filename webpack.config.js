@@ -11,6 +11,7 @@ module.exports = {
         }
     }]
   },
+  mode: 'development',
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.css', '.scss'],
     modules: ['src/client/src', 'node_modules'] // Assuming that your files are inside the src dir
