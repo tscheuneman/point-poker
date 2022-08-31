@@ -3,6 +3,8 @@ import io from 'socket.io-client';
 
 import RoomSelector from './roomSelector';
 import GameRoom from './gameRoom';
+import NameCreator from './createName';
+
 const socket = io();
 
 const App = () => {
@@ -41,6 +43,13 @@ const App = () => {
     socket.emit('resetGame', JSON.stringify({roomId: roomName}));
   }
 
+  const handleUserLogin = (userName) => {
+    if(userName) {
+      setName(userName);
+      localStorage.setItem('point-poker.displayName', userName)
+    }
+  }
+
   const selectionScreen = () => {
     if(name) {
       if (game) {
@@ -49,7 +58,7 @@ const App = () => {
         return <RoomSelector onRoomJoinCreate={handleRoomJoinCreate} />
       }
     } else {
-      return 'noName';
+      return <NameCreator userLogin={handleUserLogin} />;
     }
   }
 
